@@ -19,6 +19,10 @@ public class PlanetClick : MonoBehaviour
 
     void OnMouseDown()
     {
+        if(Time.timeScale == 0f)
+        {
+            return;  // ignore click
+        }
         Debug.Log("Planet clicked");
         if (inAir) return;
         Debug.Log("Plane not in air");

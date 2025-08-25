@@ -13,6 +13,8 @@ public class MessageManager : MonoBehaviour
 
     private string savePath;
 
+    // when the game starts, we will assign the savePath and
+    // load all remaining messages in our queue (json file)
     void Awake()
     {
         if (Instance == null)
@@ -28,27 +30,38 @@ public class MessageManager : MonoBehaviour
         }
     }
 
+    // function to reset messages
     public void ResetMessages()
     {
+        // creating a new remaining messages list with every message
         remainingMessages = new List<string>(allMessages);
+
+        // shuffling it
         Shuffle(remainingMessages);
+
+        //saving this new, populated remaining messages list
         SaveRemainingMessages();
     }
 
+    // gets the next message in the list
     public string GetNextMessage()
     {
+        // checks if we've gone through all the messages and resets if so
         if (remainingMessages.Count == 0)
         {
             ResetMessages();
         }
 
+        // gets the message, then removes it from the remaining messages list
         string msg = remainingMessages[0];
         remainingMessages.RemoveAt(0);
 
+        // saves the new remaining messages and then returns the current message
         SaveRemainingMessages();
         return msg;
     }
 
+    // shuffles the list by looping through it and switching elements at indices around
     private void Shuffle(List<string> list)
     {
         for (int i = 0; i < list.Count; i++)
@@ -58,6 +71,7 @@ public class MessageManager : MonoBehaviour
         }
     }
 
+    // function to save the remaining messages
     private void SaveRemainingMessages()
     {
         // wrapping messages in a class because List cant be converted directly into JSON
@@ -71,6 +85,12 @@ public class MessageManager : MonoBehaviour
         File.WriteAllText(savePath, json);
     }
 
+    // function to load the remaining messages
+    // does this by checking if the file at the specified path exists, then reads the file 
+    // and saves this in a variable, which is then used to create a MessageListWrapper variable
+    // we create the remaining messages from that wrapper variable
+    // if the file doesnt exist, it could be the user's first time opening the program 
+    // it will reset the messages, which creates a new messages lists, shuffles, then saves it
     private void LoadRemainingMessages()
     {
         string savePath = Path.Combine(Application.persistentDataPath, "messages.json");
@@ -86,10 +106,12 @@ public class MessageManager : MonoBehaviour
         }
     }
 
+    // we need this wrapper class so that we can convert this object into json
+    // since we cant directly convert a list into json
+    // Lists can only be converted into a json list through serialization
+    [System.Serializable]
     public class MessageListWrapper
     {
         public List<string> messages;
     }
 }
-
-

@@ -1,9 +1,13 @@
 using UnityEngine;
 
+// class to manage the main menu behaviour, such as disabling the orbit camera,
+// adding functionality to buttons,
+
 public class MainMenuManager : MonoBehaviour
 {
     public float transitionDuration = 3f; // how long camera moves for
     public MonoBehaviour orbitCameraScript;
+    public GameObject pauseManager;
     private bool transitioning = false; // if transitioning from menu to planet
     private float elapsed = 0f;
     private Vector3 startPos;
@@ -21,8 +25,10 @@ public class MainMenuManager : MonoBehaviour
             // keeping orbit camera disabled while player is in title screen
             orbitCameraScript.enabled = false;
         }
+        pauseManager.SetActive(false);
     }
 
+    // to start the game
     public void OnPlayButtonClicked()
     {
         transitioning = true; // if the camera is moving from title to planet
@@ -30,12 +36,18 @@ public class MainMenuManager : MonoBehaviour
         startPos = mainCam.transform.position; // starting position and rotations of the camera
         startRot = mainCam.transform.rotation;
 
-        // Get orbit camera's target transform
+        // get orbit camera's target transform
         if (orbitCameraScript != null && orbitCameraScript is OrbitCamera orbit)
         {
             // this method fills in values for camera's target positions
             orbit.GetInitialCameraTransform(out targetPos, out targetRot);
         }
+    }
+
+    // to quit the game
+    public void OnQuitButtonClicked()
+    {
+        Application.Quit();
     }
 
     // called once per frame
@@ -54,6 +66,7 @@ public class MainMenuManager : MonoBehaviour
         if (t >= 1f)
         {
             transitioning = false;
+            pauseManager.SetActive(true);
 
             if (orbitCameraScript != null)
             {
