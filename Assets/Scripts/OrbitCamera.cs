@@ -18,7 +18,7 @@ public class OrbitCamera : MonoBehaviour
     private float pitchVelocity = 0f;
     void Update()
     {
-        if (messageUI.activeSelf) return;
+        if (messageUI.activeSelf || Time.timeScale == 0f) return;        
        
         if (lookAtTransform == null) return;
 
@@ -38,7 +38,7 @@ public class OrbitCamera : MonoBehaviour
 
         yawVelocity = Mathf.Lerp(yawVelocity, 0f, Time.deltaTime * inertiaDamping);
         pitchVelocity = Mathf.Lerp(pitchVelocity, 0f, Time.deltaTime * inertiaDamping);
-
+        
         orbitRadius -= Input.mouseScrollDelta.y * 50f;
         orbitRadius = Mathf.Clamp(orbitRadius, minOrbitDistance, maxOrbitDistance);
 

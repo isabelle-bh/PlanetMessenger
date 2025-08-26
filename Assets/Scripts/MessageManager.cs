@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MessageManager : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class MessageManager : MonoBehaviour
     [TextArea]
     public List<string> allMessages = new List<string>();
     private List<string> remainingMessages = new List<string>();
-
+    private List<string> unlockedMessages = new List<string>();
+    private string unlockedMessagesPath;
     private string savePath;
 
     // when the game starts, we will assign the savePath and
@@ -23,6 +25,7 @@ public class MessageManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             savePath = Path.Combine(Application.persistentDataPath, "messages.json");
             LoadRemainingMessages();
+            LoadUnlockedMessages();
         }
         else
         {
@@ -55,6 +58,9 @@ public class MessageManager : MonoBehaviour
         // gets the message, then removes it from the remaining messages list
         string msg = remainingMessages[0];
         remainingMessages.RemoveAt(0);
+
+        unlockedMessages.Add(msg);
+        SaveUnlockedMessages();
 
         // saves the new remaining messages and then returns the current message
         SaveRemainingMessages();
@@ -106,6 +112,34 @@ public class MessageManager : MonoBehaviour
         }
     }
 
+    private void SaveUnlockedMessages()
+    {
+        // wrapping messages in a class because List cant be converted directly into JSON
+        MessageListWrapper wrapper = new MessageListWrapper();
+        wrapper.messages = unlockedMessages;
+        // converting to JSON
+        string json = JsonUtility.ToJson(wrapper, true);
+        // defining a path to put messages
+        string unlockedMessagesPath = Path.Combine(Application.persistentDataPath, "unlockedMessages.json");
+        // writing to the messages.json file with the newly converted JSON content
+        File.WriteAllText(unlockedMessagesPath, json);
+    }
+
+    private void LoadUnlockedMessages()
+    {
+        string unlockedMessagesPath = Path.Combine(Application.persistentDataPath, "unlockedMessages.json");
+        if (File.Exists(unlockedMessagesPath))
+        {
+            string json = File.ReadAllText(unlockedMessagesPath);
+            MessageListWrapper wrapper = JsonUtility.FromJson<MessageListWrapper>(json);
+            unlockedMessages = new List<string>(wrapper.messages);
+        }
+        else
+        {
+            unlockedMessages = new List<string>();
+        }
+    }
+
     // we need this wrapper class so that we can convert this object into json
     // since we cant directly convert a list into json
     // Lists can only be converted into a json list through serialization
@@ -114,4 +148,10 @@ public class MessageManager : MonoBehaviour
     {
         public List<string> messages;
     }
+
+    public List<string> GetUnlockedMessages()
+    {
+        return new List<string>(unlockedMessages); // copy so external scripts can’t modify the original
+    }
+
 }

@@ -8,6 +8,7 @@ public class MainMenuManager : MonoBehaviour
     public float transitionDuration = 3f; // how long camera moves for
     public MonoBehaviour orbitCameraScript;
     public GameObject pauseManager;
+    public GameObject unlockedMessagesUI;
     private bool transitioning = false; // if transitioning from menu to planet
     private float elapsed = 0f;
     private Vector3 startPos;
@@ -26,6 +27,7 @@ public class MainMenuManager : MonoBehaviour
             orbitCameraScript.enabled = false;
         }
         pauseManager.SetActive(false);
+        unlockedMessagesUI.SetActive(false);
     }
 
     // to start the game
@@ -48,6 +50,16 @@ public class MainMenuManager : MonoBehaviour
     public void OnQuitButtonClicked()
     {
         Application.Quit();
+    }
+
+    public void OnUnlockedMessagesButtonClicked()
+    {
+        unlockedMessagesUI.SetActive(true);
+    }
+
+    public void OnCloseButtonClicked()
+    {
+        unlockedMessagesUI.SetActive(false);
     }
 
     // called once per frame
