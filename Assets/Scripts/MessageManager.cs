@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UIElements;
 
 public class MessageManager : MonoBehaviour
@@ -39,11 +40,14 @@ public class MessageManager : MonoBehaviour
         // creating a new remaining messages list with every message
         remainingMessages = new List<string>(allMessages);
 
+        unlockedMessages = new List<string>();
+
         // shuffling it
         Shuffle(remainingMessages);
 
         //saving this new, populated remaining messages list
         SaveRemainingMessages();
+        SaveUnlockedMessages();
     }
 
     // gets the next message in the list
@@ -59,8 +63,11 @@ public class MessageManager : MonoBehaviour
         string msg = remainingMessages[0];
         remainingMessages.RemoveAt(0);
 
-        unlockedMessages.Add(msg);
-        SaveUnlockedMessages();
+        if (!unlockedMessages.Contains(msg))
+        {
+            unlockedMessages.Add(msg);
+            SaveUnlockedMessages();
+        }
 
         // saves the new remaining messages and then returns the current message
         SaveRemainingMessages();
@@ -132,7 +139,7 @@ public class MessageManager : MonoBehaviour
         {
             string json = File.ReadAllText(unlockedMessagesPath);
             MessageListWrapper wrapper = JsonUtility.FromJson<MessageListWrapper>(json);
-            unlockedMessages = new List<string>(wrapper.messages);
+            unlockedMessages = new List<string>(new HashSet<string>(wrapper.messages));
         }
         else
         {
@@ -153,5 +160,4 @@ public class MessageManager : MonoBehaviour
     {
         return new List<string>(unlockedMessages); // copy so external scripts can’t modify the original
     }
-
 }
