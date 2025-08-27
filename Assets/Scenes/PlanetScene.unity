@@ -2534,6 +2534,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseUI: {fileID: 1192193264}
   musicUI: {fileID: 1459724039}
+  isPaused: 0
 --- !u!1 &1202461438
 GameObject:
   m_ObjectHideFlags: 0
@@ -3455,6 +3456,7 @@ MonoBehaviour:
   returnPoint: {fileID: 1738642919}
   messageUI: {fileID: 2099280914}
   speed: 300
+  mainMenuManager: {fileID: 1456964364}
 --- !u!1 &1454342876
 GameObject:
   m_ObjectHideFlags: 0
@@ -3621,6 +3623,7 @@ MonoBehaviour:
   transitionDuration: 3
   orbitCameraScript: {fileID: 963194229}
   pauseManager: {fileID: 1196336323}
+  pauseManagerObj: {fileID: 1196336325}
   unlockedMessagesUI: {fileID: 2014058972}
   mainMenuUI: {fileID: 1202461438}
   pauseUI: {fileID: 1192193264}

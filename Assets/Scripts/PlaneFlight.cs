@@ -5,15 +5,17 @@ using TMPro;
 
 public class PlaneFlight : MonoBehaviour
 {
-    public Transform target;          // The invisible point in front of the camera
-    public Transform returnPoint;     // Where the plane goes back to
-    public GameObject messageUI;      // Your message UI object
-    public Action onReturn;           // Callback when the plane finishes returning
+    public Transform target; // invisible point in front of the camera
+    public Transform returnPoint;
+    public GameObject messageUI;
+    public Action onReturn;
 
     public float speed = 300f;
     private bool goingToTarget = true;
     private bool messageDismissed = false;
     private string messageText;
+
+    public GameObject mainMenuManager;
 
     void Start()
     {
@@ -29,6 +31,16 @@ public class PlaneFlight : MonoBehaviour
 
     void Update()
     {
+        if (mainMenuManager.activeSelf)
+        {
+            DismissMessage();
+            goingToTarget = false;
+            transform.LookAt(returnPoint.transform.position);
+            MoveTowards(returnPoint.position, () =>
+            {
+                onReturn?.Invoke();
+            });
+        }
         if (goingToTarget)
         {
             transform.LookAt(Camera.main.transform.position);
