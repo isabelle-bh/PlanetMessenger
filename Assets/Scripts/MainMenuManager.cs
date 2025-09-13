@@ -9,6 +9,7 @@ public class MainMenuManager : MonoBehaviour
     public MonoBehaviour orbitCameraScript;
     public GameObject pauseManager;
     public PauseManager pauseManagerObj;
+    public MessageManager messageManagerObj;
     public GameObject unlockedMessagesUI;
 
     public GameObject mainMenuUI;
@@ -80,6 +81,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnUnlockedMessagesButtonClicked()
     {
+        unlockedMessagesUI.GetComponent<UnlockedMessagesUI>().RefreshUI();
         unlockedMessagesUI.SetActive(true);
     }
 
