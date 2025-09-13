@@ -5,25 +5,29 @@ using System;
 
 public class UnlockedMessagesUI : MonoBehaviour
 {
-    public TextMeshProUGUI messagesText; // Reference to one TMP text component
-
+    public TextMeshProUGUI messagesText;
     void Awake()
     {
         var unlocked = MessageManager.Instance.GetUnlockedMessages();
 
-        // Build a combined string
         StringBuilder sb = new StringBuilder();
         foreach (string msg in unlocked)
         {
             Debug.Log(msg);
-            sb.AppendLine(msg); // Adds a newline after each message
+            sb.AppendLine(msg);
         }
 
-        // Set all unlocked messages into the one text box
         messagesText.text = sb.ToString();
     }
-
-    void Update()
+    public void RefreshUI()
     {
+        messagesText.text = "";
+
+        var messages = MessageManager.Instance.GetUnlockedMessages();
+
+        foreach (string msg in messages)
+        {
+            messagesText.text += msg + "\n";
+        }
     }
 }
