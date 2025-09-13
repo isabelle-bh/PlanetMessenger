@@ -26,7 +26,6 @@ Replayable Experience – Messages are shuffled and will not repeat until all ha
 - Uses Unity UI (world-space canvases)
 
 
-📜 License
+## License
 
-This project is licensed under the MIT License – see the LICENSE
- file for details.
+This project is licensed under the MIT License – see the LICENSE file for details.
