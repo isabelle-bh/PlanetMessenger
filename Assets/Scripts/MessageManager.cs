@@ -132,7 +132,7 @@ public class MessageManager : MonoBehaviour
         File.WriteAllText(unlockedMessagesPath, json);
     }
 
-    private void LoadUnlockedMessages()
+    public void LoadUnlockedMessages()
     {
         string unlockedMessagesPath = Path.Combine(Application.persistentDataPath, "unlockedMessages.json");
         if (File.Exists(unlockedMessagesPath))
